@@ -8,6 +8,7 @@ Description : Misc utils
 """
 
 import logging
+import torch
 
 
 def get_logger(log_file=None):
@@ -29,3 +30,18 @@ def get_logger(log_file=None):
     logger.addHandler(console_handler)
 
     return logger
+
+
+def word_ids_to_sentence(id_tensor, vocab, join=None):
+    """Converts a sequence of word ids to a sentence
+    id_tensor: torch-based tensor
+    vocab: torchtext vocab
+    """
+    #  if isinstance(id_tensor, torch.LongTensor):
+    ids = id_tensor.transpose(0, 1).contiguous().view(-1)
+    #  elif isinstance(id_tensor, np.ndarray):
+        #  ids = id_tensor.transpose().reshape(-1)
+    batch = [vocab.itos[ind] for ind in ids]  # denumericalize
+    if join is None:
+        return batch
+    return join.join(batch)
