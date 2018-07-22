@@ -37,7 +37,11 @@ def word_ids_to_sentence(id_tensor, vocab):
     id_tensor: torch-based tensor
     vocab: torchtext vocab
     """
-    ids = id_tensor.view(-1)
-    batch = [vocab.itos[ind] for ind in ids]  # denumericalize
-    batch = batch.view(id_tensor.size(0), -1)
-    return batch
+    id_tensor = id_tensor.transpose(0, 1)
+    symbols = []
+    for row in id_tensor:
+        row_symbols = []
+        for col in row:
+            row_symbols.append(vocab.itos[col])
+        symbols.append(row_symbols)
+    return symbols
