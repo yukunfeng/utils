@@ -49,7 +49,6 @@ def word_ids_to_sentence(id_tensor, vocab):
 
 def save_word_embedding(vocab, emb, file_name):
     """Saving word emb"""
-    print(emb)
     with open(file_name, 'x') as fh:
         fh.write(f"{emb.size(0)} {emb.size(1)}\n")
         for word, vec in zip(vocab, emb):
