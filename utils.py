@@ -45,3 +45,25 @@ def word_ids_to_sentence(id_tensor, vocab):
             row_symbols.append(vocab.itos[col])
         symbols.append(row_symbols)
     return symbols
+
+
+def save_word_embedding(vocab, emb, file_name):
+    """Saving word emb"""
+    print(emb)
+    with open(file_name, 'x') as fh:
+        fh.write(f"{emb.size(0)} {emb.size(1)}\n")
+        for word, vec in zip(vocab, emb):
+            str_vec = [f"{x.item():5.4f}" for x in vec]
+            line = word + " " + " ".join(str_vec) + "\n"
+            fh.write(line)
+
+
+def save_word_embedding_test():
+    vocab = ["a", "b", "c"]
+    emb = torch.rand(len(vocab), 5)
+    save_word_embedding(vocab, emb, "vec.txt")
+
+
+if __name__ == "__main__":
+    # Unit test
+    save_word_embedding_test()
