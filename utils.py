@@ -75,19 +75,24 @@ def save_word_embedding(vocab, emb, file_name):
             line = word + " " + " ".join(str_vec) + "\n"
             fh.write(line)
 
-def load_word_embedding(file_path, kind="no_head"):
+def load_word_embedding(file_path):
     embeddings = []
+
     with open(file_path, 'r') as fh:
-        if kind == "no_head":
-            next(fh)
-        for line in fh:
+        for count, line in enumerate(fh, 0):
             line = line.strip()
             # Skip empty lines
             if line == "":
                 continue
             items = line.split()
+
+            # Skip first line if it is miklov-style vectors
+            if count == 0 and len(items) == 2:
+                continue
+                
             embedding = [float(val) for val in items[1:]]
             embeddings.append(embedding)
+
     return torch.tensor(embeddings)
 
 def save_word_embedding_test():
